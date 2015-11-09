@@ -56,21 +56,21 @@ def create_parser():
     parser.add_argument('-p', '--path', help = 'root dir for finding files', required = True)
     parser.add_argument('-i', '--include', help = 'files extensions for calculation lines', nargs = '+', required = True)
     parser.add_argument('-x', '--exclude', help = 'patterns of files path to exclude from calculation lines', nargs = '+', default = '')
-    parser.add_argument('-e', '--empty_lines', help = 'calculation empty lines in file', action = 'store_const', const = False)
-    parser.add_argument('-E', '--empty_files', help = 'show empty files', action = 'store_const', const = False)
-    parser.add_argument('-r', '--reverse', help = 'reverse output', action = 'store_const', const = False)
+    parser.add_argument('-e', '--empty_lines', help = 'calculation empty lines in file', action = 'store_const', const = True, default = False)
+    parser.add_argument('-E', '--empty_files', help = 'show empty files', action = 'store_const', const = True, default = False)
+    parser.add_argument('-r', '--reverse', help = 'reverse output', action = 'store_const', const = True, default = False)
     parser.add_argument('-n', '--count', help = 'count of lines in output', default = None, type = int)
     return parser
                 
 if __name__ == '__main__':
     args = create_parser().parse_args(sys.argv[1:])
     root_dir = path.abspath(args.path)
-    reverse = args.reverse.lower() == 'true'
+    reverse = args.reverse
     empty_lines = args.empty_lines
     empty_files = args.empty_files
     includes = args.include
     excludes = args.exclude
     count = args.count
-    
+
     counts = calculate_lines_count(root_dir, empty_lines, empty_files, excludes, includes)
     print_lines_count(counts, reverse, count)
